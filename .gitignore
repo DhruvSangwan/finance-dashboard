@@ -1,0 +1,24 @@
+# =============================================================
+# .gitignore — files that should NEVER go to GitHub
+# =============================================================
+
+# Dependencies (reinstalled via npm install)
+node_modules/
+*/node_modules/
+
+# Environment files (contain passwords and API keys!)
+.env
+backend/.env
+frontend/.env
+frontend/.env.local
+
+# Build output (generated files)
+frontend/build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+*.swp
