@@ -1,39 +1,26 @@
 // =============================================================
 // SETTINGS PAGE (pages/Settings.jsx)
-// Profile info + Dark mode toggle
-//
-// Dark mode works by adding/removing a "dark" class on <body>
-// CSS variables then switch to dark values automatically
-// The preference is saved in localStorage so it persists
+// Dark mode, currency toggle, profile display, about section
 // =============================================================
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useCurrency } from '../context/CurrencyContext';
 
 const Settings = () => {
   const { user } = useAuth();
+  const { currency, symbol, toggleCurrency } = useCurrency();
 
-  // Initialize dark mode from localStorage (persists across sessions)
-  const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem('darkMode') === 'true';
-  });
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
 
-  // Apply dark mode class to body whenever darkMode state changes
   useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
-    // Save preference to localStorage
+    if (darkMode) document.body.classList.add('dark');
+    else document.body.classList.remove('dark');
     localStorage.setItem('darkMode', darkMode);
   }, [darkMode]);
 
-  // Also apply on first load (in case it was saved from a previous session)
   useEffect(() => {
-    if (localStorage.getItem('darkMode') === 'true') {
-      document.body.classList.add('dark');
-    }
+    if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');
   }, []);
 
   return (
@@ -41,17 +28,15 @@ const Settings = () => {
       <div className="page-header">
         <div>
           <h1>Settings</h1>
-          <p>Manage your preferences</p>
+          <p>Manage your preferences and profile</p>
         </div>
       </div>
 
-      {/* Profile card */}
+      {/* Profile */}
       <div className="settings-card">
         <h3>Profile</h3>
         <div className="profile-row">
-          <div className="profile-avatar-lg">
-            {user?.name?.charAt(0).toUpperCase()}
-          </div>
+          <div className="profile-avatar-lg">{user?.name?.charAt(0).toUpperCase()}</div>
           <div className="profile-info">
             <strong>{user?.name}</strong>
             <span>{user?.email}</span>
@@ -59,50 +44,60 @@ const Settings = () => {
         </div>
       </div>
 
-      {/* Appearance card */}
+      {/* Appearance */}
       <div className="settings-card">
         <h3>Appearance</h3>
-
         <div className="settings-row">
           <div className="settings-row-info">
             <strong>Dark Mode</strong>
             <span>Switch between light and dark theme</span>
           </div>
-
-          {/* Toggle switch */}
-          {/* This is a custom CSS toggle — no library needed */}
-          <div
-            className={`toggle-switch ${darkMode ? 'toggle-on' : ''}`}
-            onClick={() => setDarkMode(!darkMode)}
-            role="button"
-            aria-label="Toggle dark mode"
-          >
+          <div className={`toggle-switch ${darkMode ? 'toggle-on' : ''}`} onClick={() => setDarkMode(!darkMode)}>
             <div className="toggle-thumb" />
           </div>
         </div>
-
         <div className="settings-row">
           <div className="settings-row-info">
             <strong>Current Theme</strong>
-            <span>{darkMode ? '🌙 Dark' : '☀️ Light'}</span>
+            <span>{darkMode ? '🌙 Dark mode is on' : '☀️ Light mode is on'}</span>
           </div>
         </div>
       </div>
 
-      {/* About card */}
+      {/* Currency */}
       <div className="settings-card">
-        <h3>About</h3>
+        <h3>Currency</h3>
         <div className="settings-row">
           <div className="settings-row-info">
-            <strong>Finance Dashboard</strong>
-            <span>Built with React, Node.js, PostgreSQL & Groq AI</span>
+            <strong>Active Currency</strong>
+            <span>{currency === 'INR' ? '🇮🇳 Indian Rupee (₹)' : '🇺🇸 US Dollar ($)'}</span>
           </div>
+          <button className="btn-secondary" onClick={toggleCurrency}>
+            Switch to {currency === 'INR' ? '$' : '₹'}
+          </button>
         </div>
-        <div className="settings-row">
-          <div className="settings-row-info">
-            <strong>AI Provider</strong>
-            <span>Groq — llama-3.3-70b-versatile (free tier)</span>
-          </div>
+        <div className="settings-note">
+          Note: This only changes the display symbol. No actual conversion is applied.
+        </div>
+      </div>
+
+      {/* About */}
+      <div className="settings-card">
+        <h3>About this App</h3>
+        <div className="about-grid">
+          {[
+            { label: 'Frontend', value: 'React 18 + Recharts' },
+            { label: 'Backend', value: 'Node.js + Express' },
+            { label: 'Database', value: 'PostgreSQL' },
+            { label: 'Auth', value: 'JWT + bcrypt' },
+            { label: 'AI', value: 'Groq — llama-3.3-70b' },
+            { label: 'Deployment', value: 'Render (free tier)' },
+          ].map(item => (
+            <div key={item.label} className="about-item">
+              <span className="about-label">{item.label}</span>
+              <span className="about-value">{item.value}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

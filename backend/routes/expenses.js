@@ -1,26 +1,16 @@
 // =============================================================
 // EXPENSE ROUTES (routes/expenses.js)
-// All routes here require authentication (authenticateToken middleware)
 // =============================================================
-
 const express = require('express');
 const router = express.Router();
-const authenticateToken = require('../middleware/auth');
-const {
-  getExpenses,
-  createExpense,
-  updateExpense,
-  deleteExpense,
-  getStats
-} = require('../controllers/expenseController');
+const auth = require('../middleware/auth');
+const { getExpenses, getRecent, createExpense, updateExpense, deleteExpense, getStats } = require('../controllers/expenseController');
 
-// authenticateToken runs BEFORE the controller function on every route here
-// If the token is invalid, the request stops at middleware — never reaches the controller
-
-router.get('/stats', authenticateToken, getStats);       // GET  /api/expenses/stats
-router.get('/', authenticateToken, getExpenses);          // GET  /api/expenses
-router.post('/', authenticateToken, createExpense);       // POST /api/expenses
-router.put('/:id', authenticateToken, updateExpense);     // PUT  /api/expenses/42
-router.delete('/:id', authenticateToken, deleteExpense);  // DELETE /api/expenses/42
+router.get('/stats', auth, getStats);
+router.get('/recent', auth, getRecent);
+router.get('/', auth, getExpenses);
+router.post('/', auth, createExpense);
+router.put('/:id', auth, updateExpense);
+router.delete('/:id', auth, deleteExpense);
 
 module.exports = router;

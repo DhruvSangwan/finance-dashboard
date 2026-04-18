@@ -1,39 +1,32 @@
 // =============================================================
 // LAYOUT (components/Layout.jsx)
-// Wraps all protected pages with the sidebar.
-// Manages the open/close state of the mobile sidebar.
-//
-// Usage: wrap any page with <Layout><YourPage /></Layout>
+// Wraps all protected pages with sidebar + floating add button
 // =============================================================
 
 import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
 const Layout = ({ children }) => {
-  // Track whether sidebar is open on mobile
-  // On desktop this doesn't matter — sidebar is always visible via CSS
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Show floating button on all pages except settings
+  const showFab = location.pathname !== '/settings';
+
+  const handleFabClick = () => {
+    // Navigate to expenses page and open the add form
+    navigate('/expenses?add=true');
+  };
 
   return (
     <div className="layout">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      {/* Sidebar — receives open state and close handler */}
-      <Sidebar
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
-
-      {/* Main content area — everything to the right of the sidebar */}
       <div className="layout-main">
-
-        {/* Top bar — only visible on mobile, contains hamburger button */}
         <div className="mobile-topbar">
-          <button
-            className="hamburger"
-            onClick={() => setSidebarOpen(true)}
-            aria-label="Open menu"
-          >
-            {/* Three lines = hamburger icon, drawn with CSS */}
+          <button className="hamburger" onClick={() => setSidebarOpen(true)}>
             <span className="hamburger-line" />
             <span className="hamburger-line" />
             <span className="hamburger-line" />
@@ -41,12 +34,17 @@ const Layout = ({ children }) => {
           <span className="mobile-brand">💰 FinanceAI</span>
         </div>
 
-        {/* Page content */}
         <main className="layout-content">
           {children}
         </main>
-
       </div>
+
+      {/* Floating action button — always visible, opens add expense */}
+      {showFab && (
+        <button className="fab" onClick={handleFabClick} title="Add Expense">
+          +
+        </button>
+      )}
     </div>
   );
 };

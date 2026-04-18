@@ -1,73 +1,219 @@
 # 💰 Personal Finance Dashboard
 
-A full-stack web app with AI-powered spending insights.
+A full-stack application to **track expenses, manage monthly budgets, and understand spending behavior through meaningful insights**.
 
-## Tech Stack
-- **Frontend**: React + Recharts
-- **Backend**: Node.js + Express
-- **Database**: PostgreSQL
-- **Auth**: JWT (JSON Web Tokens)
-- **AI**: Claude API
+---
 
-## Folder Structure
+## 🎯 What this project is about
+
+Most expense trackers only show data.
+
+This project focuses on:
+
+* **tracking spending**
+* **understanding patterns**
+* **making better financial decisions**
+
+Instead of just listing transactions, it analyzes your data to answer:
+
+* Where am I spending the most?
+* Am I going over budget?
+* What will I spend by the end of the month?
+
+---
+
+## 🚀 Features
+
+### 📊 Dashboard
+
+* Monthly spending overview
+* Budget usage with visual progress
+* Week-over-week and month-over-month comparisons
+* Recent transactions
+
+---
+
+### 📈 Budget Planning
+
+* Set monthly budget
+* Remaining budget calculation
+* Daily budget left
+* Projected end-of-month spending
+* Weekly spending breakdown
+
+---
+
+### 🔍 Analytics
+
+* Spending by day of week (behavior patterns)
+* Top expenses in a month
+* Category-wise breakdown with percentages
+* Trend charts over time
+
+---
+
+### 💡 Insights (core idea)
+
+The app computes:
+
+* Total monthly spend
+* Average daily spending
+* Highest spending category
+* Budget overrun / underutilization
+* Spending trends across time
+
+The goal is to move from:
+
+> “data display” → “decision support”
+
+---
+
+### 🤖 AI Features (experimental)
+
+* Natural language search for expenses
+* AI-generated summaries of spending
+
+(*Note: core insights are computed locally using deterministic logic*)
+
+---
+
+## 🧠 How it works (high level)
+
+```text
+User Input → Stored in PostgreSQL
+            ↓
+Backend (Node.js + Express)
+            ↓
+Data Processing (aggregations, projections, comparisons)
+            ↓
+Frontend (React)
+            ↓
+Charts + Insights + UI
+```
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend**
+
+* React (Vite)
+* Recharts
+
+**Backend**
+
+* Node.js
+* Express
+
+**Database**
+
+* PostgreSQL
+
+**Authentication**
+
+* JWT (JSON Web Tokens)
+
+**Other**
+
+* CSV export
+* Basic AI integration (Claude API)
+
+---
+
+## 📁 Project Structure
+
 ```
 finance-dashboard/
 ├── backend/
-│   ├── config/         → Database connection setup
-│   ├── controllers/    → Business logic (what happens when routes are hit)
-│   ├── middleware/     → Auth checks, error handling
-│   ├── models/         → SQL queries for the database
-│   ├── routes/         → URL endpoint definitions
-│   ├── server.js       → App entry point
-│   └── package.json
+│   ├── config/         → Database setup
+│   ├── controllers/    → Core logic
+│   ├── middleware/     → Auth & error handling
+│   ├── models/         → DB queries
+│   ├── routes/         → API endpoints
+│   └── server.js
 ├── frontend/
-│   ├── src/
-│   │   ├── components/ → Reusable UI pieces (charts, forms, etc.)
-│   │   ├── pages/      → Full pages (Login, Dashboard, etc.)
-│   │   ├── context/    → Global state (who's logged in)
-│   │   ├── utils/      → Helper functions (API calls, CSV export)
-│   │   └── App.jsx     → Root component + routing
-│   └── package.json
-└── README.md
+│   ├── components/     → UI components
+│   ├── pages/          → App screens
+│   ├── context/        → Global state
+│   ├── utils/          → API + helpers
+│   └── App.jsx
 ```
 
-## Setup Instructions
+---
 
-### 1. Prerequisites
-- Node.js (v18+): https://nodejs.org
-- PostgreSQL: https://postgresql.org/download
+## ⚙️ Setup
 
-### 2. Database Setup
+### Prerequisites
+
+* Node.js (v18+)
+* PostgreSQL
+
+---
+
+### Database
+
 ```sql
--- In psql or pgAdmin, create the database:
 CREATE DATABASE finance_dashboard;
 ```
-Then run the SQL in `backend/config/schema.sql` to create tables.
 
-### 3. Backend Setup
+Run schema from:
+
+```
+backend/config/schema.sql
+```
+
+---
+
+### Backend
+
 ```bash
 cd backend
 npm install
 cp .env.example .env
-# Edit .env with your database credentials and secrets
 npm run dev
 ```
 
-### 4. Frontend Setup
+---
+
+### Frontend
+
 ```bash
 cd frontend
 npm install
 npm start
 ```
 
-### 5. Environment Variables (backend/.env)
+---
+
+### Environment Variables
+
 ```
 PORT=5000
 DATABASE_URL=postgresql://username:password@localhost:5432/finance_dashboard
-JWT_SECRET=your_random_secret_string_here
-ANTHROPIC_API_KEY=your_claude_api_key_here
+JWT_SECRET=your_secret
+ANTHROPIC_API_KEY=your_key
 FRONTEND_URL=http://localhost:3000
 ```
 
-## Deployment (Render)
-See `DEPLOYMENT.md` for step-by-step Render deployment guide.
+---
+
+## 📌 Notes
+
+* The system focuses on **practical financial insights**, not just UI
+* All calculations (budget, projections, trends) are computed from user data
+* Designed to simulate real-world personal finance tools
+
+---
+
+## 👤 Author
+
+Dhruv Sangwan
+
+---
+
+## ⭐ Why this project stands out
+
+* Full-stack implementation (frontend + backend + database)
+* Real-world use case (personal finance management)
+* Emphasis on **insight generation, not just visualization**
+* Demonstrates system design, data processing, and user-focused thinking

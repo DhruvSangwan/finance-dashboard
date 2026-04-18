@@ -13,18 +13,13 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
-    if (password.length < 6) {
-      return setError('Password must be at least 6 characters.');
-    }
-
+    if (password.length < 6) return setError('Password must be at least 6 characters.');
     setLoading(true);
     try {
       const data = await api.auth.signup(name, email, password);
@@ -44,54 +39,26 @@ const Signup = () => {
           <h1>💰 FinanceAI</h1>
           <p>Create your free account</p>
         </div>
-
         <form onSubmit={handleSubmit} className="auth-form">
           {error && <div className="error-banner">{error}</div>}
-
           <div className="form-group">
-            <label htmlFor="name">Full Name</label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Jane Smith"
-              required
-            />
+            <label>Full Name</label>
+            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" required />
           </div>
-
           <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-            />
+            <label>Email</label>
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" required />
           </div>
-
           <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Min. 6 characters"
-              required
-            />
+            <label>Password</label>
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Min. 6 characters" required />
           </div>
-
-          <button type="submit" className="btn-primary" disabled={loading}>
+          <button type="submit" className="btn-primary" disabled={loading} style={{ width: '100%', padding: '0.75rem' }}>
             {loading ? 'Creating account...' : 'Create Account'}
           </button>
         </form>
-
         <p className="auth-footer">
-          Already have an account?{' '}
-          <Link to="/login">Sign in</Link>
+          Already have an account? <Link to="/login">Sign in</Link>
         </p>
       </div>
     </div>

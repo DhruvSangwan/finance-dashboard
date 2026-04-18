@@ -1,6 +1,6 @@
 // =============================================================
 // API UTILITY (utils/api.js)
-// All calls to the backend are defined here in one place.
+// All backend calls in one place with JWT auth header
 // =============================================================
 
 const BASE_URL = process.env.REACT_APP_API_URL || '/api';
@@ -22,9 +22,7 @@ const authFetch = async (url, options = {}) => {
     localStorage.removeItem('user');
     window.location.href = '/login';
   }
-  if (!response.ok) {
-    throw new Error(data.error || 'Something went wrong');
-  }
+  if (!response.ok) throw new Error(data.error || 'Something went wrong');
   return data;
 };
 
@@ -38,8 +36,9 @@ export const api = {
   expenses: {
     getAll: (month) => authFetch(`/expenses${month ? `?month=${month}` : ''}`),
     getStats: () => authFetch('/expenses/stats'),
-    create: (expenseData) => authFetch('/expenses', { method: 'POST', body: JSON.stringify(expenseData) }),
-    update: (id, expenseData) => authFetch(`/expenses/${id}`, { method: 'PUT', body: JSON.stringify(expenseData) }),
+    getRecent: () => authFetch('/expenses/recent'),
+    create: (data) => authFetch('/expenses', { method: 'POST', body: JSON.stringify(data) }),
+    update: (id, data) => authFetch(`/expenses/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id) => authFetch(`/expenses/${id}`, { method: 'DELETE' }),
   },
   budget: {
@@ -50,5 +49,6 @@ export const api = {
     getInsight: () => authFetch('/ai/insight', { method: 'POST' }),
     searchExpenses: (query) => authFetch('/ai/search', { method: 'POST', body: JSON.stringify({ query }) }),
     parseExpense: (text) => authFetch('/ai/parse', { method: 'POST', body: JSON.stringify({ text }) }),
+    getAnalytics: (data) => authFetch('/ai/analytics', { method: 'POST', body: JSON.stringify(data) }),
   },
 };
